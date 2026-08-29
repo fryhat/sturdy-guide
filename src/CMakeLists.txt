@@ -1,5 +1,6 @@
 # src/ 负责可复用库 target 及其构建要求。
 add_library(sturdy_guide
+  add.cpp
   greeting.cpp
   text.cpp
 )

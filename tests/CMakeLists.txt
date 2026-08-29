@@ -5,6 +5,7 @@ function(add_sturdy_guide_test target source)
   add_test(NAME ${target} COMMAND ${target})
 endfunction()
 
-# 构建完成后，CTest 会按这里注册的名称运行两个测试程序。
+# 构建完成后，CTest 会按这里注册的名称运行三个测试程序。
+add_sturdy_guide_test(add_test add_test.cpp)
 add_sturdy_guide_test(greeting_test greeting_test.cpp)
 add_sturdy_guide_test(text_test text_test.cpp)
