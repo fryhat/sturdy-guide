@@ -1,0 +1,3 @@
+add_executable(camera_session_test camera_session_test.cpp)
+target_link_libraries(camera_session_test PRIVATE sturdy_guide_camera_core)
+add_test(NAME camera_session_test COMMAND camera_session_test)
