@@ -14,8 +14,19 @@ int main() {
     require(session.buffered_frames() <= 2, "buffer exceeded two frames"); session.stop(); session.stop(); session.join();
     require(session.latest_frame().has_value(), "latest frame missing");
     bool repeated_start_threw = false;
-    try { session.start(); } catch (const std::logic_error&) { repeated_start_threw = true; }
-    require(repeated_start_threw, "repeated start contract missing");
+    {
+      auto running_source = std::make_unique<camera::FakeFrameSource>(3, 2ms);
+      camera::CameraSession running(std::move(running_source));
+      running.start();
+      try { running.start(); } catch (const std::logic_error&) { repeated_start_threw = true; }
+      running.stop(); running.join();
+    }
+    require(repeated_start_threw, "repeated start while running must throw");
+    // After stop()+join() the session is idle again and may be restarted.
+    bool restart_ok = true;
+    try { session.start(); } catch (const std::logic_error&) { restart_ok = false; }
+    require(restart_ok, "restart after join should be allowed");
+    session.stop(); session.join();
     auto failing_source = std::make_unique<camera::FakeFrameSource>(0, 1ms);
     failing_source->set_fail_after(2);
     camera::CameraSession failed(std::move(failing_source));

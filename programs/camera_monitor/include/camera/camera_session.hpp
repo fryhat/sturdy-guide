@@ -23,6 +23,7 @@ class CameraSession {
   bool wait_for_frame(std::chrono::milliseconds timeout);
   std::exception_ptr exception() const;
   std::size_t buffered_frames() const;
+  bool is_running() const noexcept;
  private:
   void capture_loop();
   std::unique_ptr<FrameSource> source_;

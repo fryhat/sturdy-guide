@@ -27,6 +27,10 @@ bool CameraSession::wait_for_frame(const std::chrono::milliseconds timeout) {
 }
 std::exception_ptr CameraSession::exception() const { std::lock_guard<std::mutex> lock(mutex_); return exception_; }
 std::size_t CameraSession::buffered_frames() const { std::lock_guard<std::mutex> lock(mutex_); return buffer_.size(); }
+bool CameraSession::is_running() const noexcept {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return running_;
+}
 void CameraSession::capture_loop() {
   try {
     while (true) {
